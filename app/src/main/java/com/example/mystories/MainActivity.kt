@@ -4,6 +4,8 @@ package com.example.mystories
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.mystories.databinding.ActivityMainBinding
@@ -22,6 +24,21 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         isLogin()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.btnLogout -> {
+                viewModel.saveToken("")
+                startActivity(Intent(this, AuthenticationActivity::class.java))
+            }
+        }
+        return true
     }
 
     private fun isLogin(){
@@ -43,6 +60,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val EXTRA_TOKEN = "extra_token"
+        const val TOKEN = "token"
     }
 }

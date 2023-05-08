@@ -40,9 +40,9 @@ class RegisterFragment : Fragment() {
 
     private fun setAction(){
         binding.btnRegister.setOnClickListener{
-            val name = binding.etNameRegister.toString().trim()
-            val email = binding.etEmailRegister.toString().trim()
-            val password = binding.etPasswordRegister.toString()
+            val name = binding.etNameRegister.text.toString().trim()
+            val email = binding.etEmailRegister.text.toString().trim()
+            val password = binding.etPasswordRegister.text.toString()
 
             lifecycleScope.launchWhenResumed {
                 if (registerJob.isActive) registerJob.cancel()

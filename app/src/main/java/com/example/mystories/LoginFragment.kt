@@ -13,7 +13,7 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
-import com.example.mystories.MainActivity.Companion.EXTRA_TOKEN
+import com.example.mystories.MainActivity.Companion.TOKEN
 import com.example.mystories.databinding.FragmentLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -60,7 +60,7 @@ class LoginFragment : Fragment() {
                             it.loginResult?.token?.let { token ->
                                 viewModel.saveToken(token)
                                 Intent(requireContext(), MainActivity::class.java).also { intent ->
-                                    intent.putExtra(EXTRA_TOKEN, token)
+                                    intent.putExtra(TOKEN, token)
                                     startActivity(intent)
                                     requireActivity().finish()
                                 }
