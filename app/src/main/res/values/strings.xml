@@ -19,4 +19,14 @@
     <string name="login_error">Login gagal</string>
     <string name="register_success">Register Berhasil</string>
     <string name="register_error">Register gagal</string>
+    <string name="date">Mei 5, 2023</string>
+    <string name="description">Register gagal</string>
+    <string name="error_rv">Error membuat list data</string>
+    <string name="add">Add Story</string>
+    <string name="select_image">Piih gambar</string>
+    <string name="save">Simpan</string>
+    <string name="galeri">Galeri</string>
+    <string name="camera">Kamera</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="maps">Maps</string>
 </resources>

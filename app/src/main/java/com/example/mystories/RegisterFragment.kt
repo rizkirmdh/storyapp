@@ -1,5 +1,7 @@
 package com.example.mystories
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -31,6 +33,7 @@ class RegisterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setAction()
+        playAnimation()
     }
 
     override fun onDestroyView() {
@@ -56,7 +59,6 @@ class RegisterFragment : Fragment() {
                                 Toast.LENGTH_SHORT
                             ).show()
 
-                            // Automatically navigate user back to the login page
                             findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
                         }
                         it.onFailure {
@@ -70,5 +72,24 @@ class RegisterFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun playAnimation(){
+
+        val image = ObjectAnimator.ofFloat(binding.imageView, View.ALPHA, 1f).setDuration(500)
+        val title = ObjectAnimator.ofFloat(binding.titleTextView, View.ALPHA, 1f).setDuration(500)
+        val tvName = ObjectAnimator.ofFloat(binding.nameTextView, View.ALPHA, 1f).setDuration(500)
+        val edtName = ObjectAnimator.ofFloat(binding.etNameRegister, View.ALPHA, 1f).setDuration(500)
+        val tvEmail = ObjectAnimator.ofFloat(binding.emailTextView, View.ALPHA, 1f).setDuration(500)
+        val edtEmail = ObjectAnimator.ofFloat(binding.etEmailRegister, View.ALPHA, 1f).setDuration(500)
+        val tvPassword = ObjectAnimator.ofFloat(binding.passwordTextView, View.ALPHA, 1f).setDuration(500)
+        val edtPassword = ObjectAnimator.ofFloat(binding.etPasswordRegister, View.ALPHA, 1f).setDuration(500)
+        val register = ObjectAnimator.ofFloat(binding.btnRegister, View.ALPHA, 1f).setDuration(500)
+
+
+        AnimatorSet().apply {
+            playSequentially(image, title, tvName, edtName, tvEmail, edtEmail, tvPassword, edtPassword, register)
+            startDelay = 500
+        }.start()
     }
 }

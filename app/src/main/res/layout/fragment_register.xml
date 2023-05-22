@@ -8,6 +8,7 @@
 
     <ImageView
         android:id="@+id/imageView"
+        android:alpha="0"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="32dp"
@@ -16,11 +17,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline2"
-        app:srcCompat="@drawable/baseline_person_24" />
+        app:srcCompat="@drawable/img_login" />
 
     <TextView
         android:id="@+id/titleTextView"
-        android:alpha="1"
+        android:alpha="0"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -37,7 +38,7 @@
 
     <TextView
         android:id="@+id/nameTextView"
-        android:alpha="1"
+        android:alpha="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -49,6 +50,7 @@
 
     <com.example.mystories.view.CustomNameEditText
         android:id="@+id/et_name_register"
+        android:alpha="0"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
@@ -61,7 +63,7 @@
 
     <TextView
         android:id="@+id/emailTextView"
-        android:alpha="1"
+        android:alpha="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -73,6 +75,7 @@
 
     <com.example.mystories.view.CustomEmailEditText
         android:id="@+id/et_email_register"
+        android:alpha="0"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
@@ -85,7 +88,7 @@
 
     <TextView
         android:id="@+id/passwordTextView"
-        android:alpha="1"
+        android:alpha="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -97,6 +100,7 @@
 
     <com.example.mystories.view.CustomPasswordEditText
         android:id="@+id/et_password_register"
+        android:alpha="0"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
@@ -109,6 +113,7 @@
 
     <Button
         android:id="@+id/btn_register"
+        android:alpha="0"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"

@@ -1,5 +1,7 @@
 package com.example.mystories
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -38,12 +40,31 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        isLogin()
         setAction()
+        playAnimation()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun isLogin(){
+        lifecycleScope.launchWhenCreated {
+            launch {
+                viewModel.getToken().collect() {
+                    if (it.isNullOrEmpty()){
+
+                    }else{
+                        Intent(requireContext(), MainActivity::class.java).also { intent ->
+                            intent.putExtra(TOKEN, it)
+                            startActivity(intent)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun setAction() {
@@ -88,5 +109,24 @@ class LoginFragment : Fragment() {
         binding.btnRegister.setOnClickListener(
             Navigation.createNavigateOnClickListener(R.id.action_loginFragment_to_registerFragment)
             )
+    }
+
+    private fun playAnimation(){
+
+        val image = ObjectAnimator.ofFloat(binding.logoImage, View.ALPHA, 1f).setDuration(500)
+        val title = ObjectAnimator.ofFloat(binding.titleTextView, View.ALPHA, 1f).setDuration(500)
+        val tvEmail = ObjectAnimator.ofFloat(binding.emailTextView, View.ALPHA, 1f).setDuration(500)
+        val edtEmail = ObjectAnimator.ofFloat(binding.etEmailLogin, View.ALPHA, 1f).setDuration(500)
+        val tvPassword = ObjectAnimator.ofFloat(binding.passwordTextView, View.ALPHA, 1f).setDuration(500)
+        val edtPassword = ObjectAnimator.ofFloat(binding.etPasswordLogin, View.ALPHA, 1f).setDuration(500)
+        val login = ObjectAnimator.ofFloat(binding.btnLogin, View.ALPHA, 1f).setDuration(500)
+        val tvRegister = ObjectAnimator.ofFloat(binding.registerTextView, View.ALPHA, 1f).setDuration(500)
+        val register = ObjectAnimator.ofFloat(binding.btnRegister, View.ALPHA, 1f).setDuration(500)
+
+
+        AnimatorSet().apply {
+            playSequentially(image, title, tvEmail, edtEmail, tvPassword, edtPassword, login, tvRegister, register)
+            startDelay = 500
+        }.start()
     }
 }

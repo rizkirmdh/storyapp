@@ -2,6 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
+    <item
+        android:id="@+id/btnAdd"
+        android:icon="@drawable/baseline_add_24"
+        android:title="@string/add"
+        app:showAsAction="collapseActionView|always" />
+
+    <item
+        android:id="@+id/btnMaps"
+        android:icon="@drawable/baseline_my_location_24"
+        android:title="@string/maps"
+        app:showAsAction="collapseActionView|always"/>
+
     <item
         android:id="@+id/btnLogout"
         android:icon="@drawable/ic_baseline_logout_24"
