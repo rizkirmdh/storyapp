@@ -4,7 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.bumptech.glide.Glide
 import com.example.mystories.databinding.ActivityDetailBinding
-import com.example.mystories.remote.Story
+import com.example.mystories.local.entity.Story
+import com.example.mystories.remote.StoryItem
 import com.example.mystories.utils.setDate
 
 class DetailActivity : AppCompatActivity() {
@@ -16,21 +17,21 @@ class DetailActivity : AppCompatActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val storyData = intent.getParcelableExtra<Story>(DETAIL)
+        val storyItemData = intent.getParcelableExtra<Story>(DETAIL)
 
-        setStory(storyData)
+        setStory(storyItemData)
     }
 
-    private fun setStory(story: Story?){
-        if (story != null){
+    private fun setStory(storyItem: Story?){
+        if (storyItem != null){
             binding.apply {
-                detailName.text = story.name
-                detailDate.setDate(story.createdAt)
-                detaiDesc.text = story.description
+                detailName.text = storyItem.name
+                detailDate.setDate(storyItem.createdAt)
+                detaiDesc.text = storyItem.desc
 
                 Glide
                     .with(this@DetailActivity)
-                    .load(story.photoUrl)
+                    .load(storyItem.photoUrl)
                     .into(detailImage)
 
             }

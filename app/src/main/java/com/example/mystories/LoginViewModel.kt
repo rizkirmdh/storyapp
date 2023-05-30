@@ -10,7 +10,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(private val loginRepository: LoginRepository) : ViewModel() {
-
     suspend fun accountLogin(email: String, password: String) = loginRepository.accountLogin(email, password)
 
     fun saveToken(token: String){

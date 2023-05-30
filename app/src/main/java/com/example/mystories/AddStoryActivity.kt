@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.location.Location
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -15,11 +16,14 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.ExperimentalPagingApi
 import com.example.mystories.databinding.ActivityAddStoryBinding
 import com.example.mystories.utils.Media.createCustomTempFile
 import com.example.mystories.utils.Media.reduceFileImage
 import com.example.mystories.utils.Media.rotateFile
 import com.example.mystories.utils.Media.uriToFile
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -27,10 +31,11 @@ import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
-
+@ExperimentalPagingApi
 @AndroidEntryPoint
 class AddStoryActivity : AppCompatActivity() {
 
@@ -39,6 +44,8 @@ class AddStoryActivity : AppCompatActivity() {
     private lateinit var currentPhotoPath: String
     private var getFile: File? = null
     private var token: String = ""
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var location: Location? = null
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -101,6 +108,8 @@ class AddStoryActivity : AppCompatActivity() {
             )
         }
 
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
         lifecycleScope.launchWhenCreated {
             launch {
                 viewModel.getToken().collect(){
@@ -111,6 +120,13 @@ class AddStoryActivity : AppCompatActivity() {
 
         binding.btnCamera.setOnClickListener {startIntentCamera()}
         binding.btnGalery.setOnClickListener{startIntentGallery()}
+        binding.swLocation.setOnCheckedChangeListener { _, ischeck ->
+            if (ischeck){
+                getLocation()
+            } else{
+                this.location = null
+            }
+        }
         binding.btnSave.setOnClickListener{
             val etDesc = binding.etDesc
 
@@ -130,9 +146,17 @@ class AddStoryActivity : AppCompatActivity() {
         val requestImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
         val  imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData("photo", file.name, requestImageFile)
 
+        var lon: RequestBody? = null
+        var lat: RequestBody? = null
+
+        if (location != null){
+            lon = location?.longitude.toString().toRequestBody("text/plain".toMediaType())
+            lat = location?.latitude.toString().toRequestBody("text/plain".toMediaType())
+        }
+
         lifecycleScope.launchWhenStarted {
             launch {
-                viewModel.uploadImage(token, imageMultipart, desc).collect(){ response ->
+                viewModel.uploadImage(token, imageMultipart, desc, lat, lon).collect(){ response ->
                     response.onSuccess {
                         Toast.makeText(this@AddStoryActivity, "Story berhasil di upload", Toast.LENGTH_SHORT).show()
                         finish()
@@ -170,6 +194,30 @@ class AddStoryActivity : AppCompatActivity() {
         val chooser = Intent.createChooser(intent, "Choose a Picture")
         launcherIntentGallery.launch(chooser)
     }
+
+    private fun getLocation(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            fusedLocationClient.lastLocation.addOnSuccessListener {
+                if (it != null){
+                    this.location = it
+                }else{
+                    Toast.makeText(this, "Aktifkan layanan lokasi anda", Toast.LENGTH_SHORT).show()
+                    binding.swLocation.isChecked = false
+                }
+            }
+        } else {
+            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+    }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                getLocation()
+            }
+        }
 
     companion object {
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
